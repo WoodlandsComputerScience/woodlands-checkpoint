@@ -154,6 +154,10 @@ const failureColor = 0xED4245
 var (
 	commands = []*discordgo.ApplicationCommand{
 		{
+			Name:        "version",
+			Description: "Displays build and version information.",
+		},
+		{
 			Name:        "verify",
 			Description: "Verify yourself for access to the server.",
 			Options: []*discordgo.ApplicationCommandOption{
@@ -353,6 +357,26 @@ var (
 	}
 
 	commandsHandlers = map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate){
+		"version": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+			embed := &discordgo.MessageEmbed{
+				Title:       "Verified",
+				Color:       successColor,
+				Description: "Please ask an administrator to use `/config set verified_role`.",
+			}
+			response := discordgo.InteractionResponse{
+				Type: discordgo.InteractionResponseChannelMessageWithSource,
+				Data: &discordgo.InteractionResponseData{
+					Flags: 1 << 6,
+				},
+			}
+			response.Data.Embeds = []*discordgo.MessageEmbed{embed}
+
+			err := s.InteractionRespond(i.Interaction, &response)
+
+			if err != nil {
+				log.Println(err)
+			}
+		},
 		"verify": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 			firstName := strings.Title(i.ApplicationCommandData().Options[0].StringValue())
 			lastName := strings.Title(i.ApplicationCommandData().Options[1].StringValue())
@@ -643,11 +667,16 @@ func init() {
 		},
 	)
 }
+
+func getBuildInfo() string {
+	return fmt.Sprintf("Built on %s (%s) with %s/%s", BuildVersion, BuildTime, GOOS, GOARCH)
+}
+
 func main() {
 	s.AddHandler(
 		func(s *discordgo.Session, r *discordgo.Ready) {
 			log.Println("Bot is up!")
-			log.Println(fmt.Sprintf("Built on %s (%s) with %s/%s", BuildVersion, BuildTime, GOOS, GOARCH))
+			log.Println(getBuildInfo())
 		},
 	)
 
