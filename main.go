@@ -378,7 +378,7 @@ var (
 			embed := &discordgo.MessageEmbed{
 				Title:       "Verified",
 				Color:       successColor,
-				Description: "Please ask an administrator to use `/config set verified_role`.",
+				Description: fmt.Sprintf("Build info: %s", getBuildInfo()),
 			}
 			response := discordgo.InteractionResponse{
 				Type: discordgo.InteractionResponseChannelMessageWithSource,
