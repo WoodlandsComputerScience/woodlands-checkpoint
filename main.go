@@ -99,10 +99,10 @@ func initEmbed(title string) discordgo.MessageEmbed {
 	return discordgo.MessageEmbed{
 		Title: title,
 		Color: failureColor,
-		Footer: &discordgo.MessageEmbedFooter{
-			Text:    "Made with ❤️ by vidhan#0001",
-			IconURL: "https://www.gravatar.com/avatar/30f4d3ebd5b0d0462ea90f7364a6afc4.png",
-		},
+		//Footer: &discordgo.MessageEmbedFooter{
+		//	Text:    "Made with ❤️ by vidhan#0001",
+		//	IconURL: "https://www.gravatar.com/avatar/30f4d3ebd5b0d0462ea90f7364a6afc4.png",
+		//},
 	}
 }
 
