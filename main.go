@@ -99,10 +99,10 @@ func initEmbed(title string) discordgo.MessageEmbed {
 	return discordgo.MessageEmbed{
 		Title: title,
 		Color: failureColor,
-		//Footer: &discordgo.MessageEmbedFooter{
-		//	Text:    "Made with ❤️ by vidhan#0001",
-		//	IconURL: "https://www.gravatar.com/avatar/30f4d3ebd5b0d0462ea90f7364a6afc4.png",
-		//},
+		Footer: &discordgo.MessageEmbedFooter{
+			Text:    "Made with ❤️ by vidhan#0001",
+			IconURL: "https://www.gravatar.com/avatar/30f4d3ebd5b0d0462ea90f7364a6afc4.png",
+		},
 	}
 }
 
@@ -387,18 +387,17 @@ var (
 
 	commandsHandlers = map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate){
 		"version": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
-			embed := &discordgo.MessageEmbed{
-				Title:       "Verified",
-				Color:       successColor,
-				Description: fmt.Sprintf("Build info: %s", getBuildInfo()),
-			}
+			embed := initEmbed("Version")
+			embed.Color = successColor
+			embed.Description = fmt.Sprintf("Build info: %s", getBuildInfo())
+
 			response := discordgo.InteractionResponse{
 				Type: discordgo.InteractionResponseChannelMessageWithSource,
 				Data: &discordgo.InteractionResponseData{
 					Flags: 1 << 6,
 				},
 			}
-			response.Data.Embeds = []*discordgo.MessageEmbed{embed}
+			response.Data.Embeds = []*discordgo.MessageEmbed{&embed}
 
 			err := s.InteractionRespond(i.Interaction, &response)
 
